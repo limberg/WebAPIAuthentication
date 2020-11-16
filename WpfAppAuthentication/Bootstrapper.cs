@@ -5,6 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using WpfAppAuthentication.APIServices;
+using WpfAppAuthentication.Helpers;
 using WpfAppAuthentication.ViewModels;
 
 namespace WpfAppAuthentication
@@ -16,6 +19,8 @@ namespace WpfAppAuthentication
         public Bootstrapper()
         {
             Initialize();
+
+            ConventionManager.AddElementConvention<PasswordBox>(PasswordBoxHelper.BoundPasswordProperty, "Password", "PasswordChange");
         }
 
         protected override void Configure()
@@ -24,7 +29,8 @@ namespace WpfAppAuthentication
             //Dependency Injection
             _container
                 .Singleton<IWindowManager, WindowManager>()
-                .Singleton<IEventAggregator, EventAggregator>();
+                .Singleton<IEventAggregator, EventAggregator>()
+                .Singleton<IAPIHelper, APIHelper>();
 
             //Reflection acces jeden Class with end ViewModel and register per request
             GetType().Assembly.GetTypes()
